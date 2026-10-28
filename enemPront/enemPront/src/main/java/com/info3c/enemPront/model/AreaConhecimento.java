@@ -3,30 +3,29 @@ package br.com.info3c.enemPront.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Area_Conhecimento")
-public class AreaConhecimento {
-
+public class Area_Conhecimento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_Area_Conhecimento")
-    private Integer idAreaConhecimento;
+    private Long ID_Area_Conhecimento;
+    private Integer Ano_aplicacao;
+    private String Tipo_aplicacao;
 
-    @Column(name = "Nome")
-    private String nome;
-
-    public Integer getIdAreaConhecimento() {
-        return idAreaConhecimento;
+    public Long getID_Area_Conhecimento(){
+        return ID_Area_Conhecimento;
     }
-
-    public void setIdAreaConhecimento(Integer idAreaConhecimento) {
-        this.idAreaConhecimento = idAreaConhecimento;
+    public void setID_Area_Conhecimento(Long ID_Area_Conhecimento){
+        this.ID_Area_Conhecimento = ID_Area_Conhecimento;
     }
-
-    public String getNome() {
-        return nome;
+    public Integer getAno_aplicacao(){
+        return Ano_aplicacao;
     }
-
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setAno_aplicacao(Integer Ano_aplicacao){
+        this.Ano_aplicacao = Ano_aplicacao;
+    }
+    public String getTipo_aplicacao(){
+        return Tipo_aplicacao;
+    }
+    public void setTipo_aplicacao(String Tipo_aplicacao){
+        this.Tipo_aplicacao = Tipo_aplicacao;
     }
 }

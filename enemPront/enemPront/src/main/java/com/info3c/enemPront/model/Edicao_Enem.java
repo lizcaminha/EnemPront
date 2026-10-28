@@ -3,42 +3,30 @@ package br.com.info3c.enemPront.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Edicao_Enem")
-public class EdicaoEnem {
 
+public class Edicao_Enem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_Edicao_Enem")
     private Long ID_Edicao_Enem;
+    private Integer Ano_aplicacao;
+    private String Tipo_aplicacao;
 
-    @Column(name = "ano_aplicacao")
-    private Integer anoAplicacao;
-
-    @Column(name = "tipo_aplicacao")
-    private String tipoAplicacao;
-
-
-    public Long getID_Edicao_Enem() {
+    public Long getID_Edicao_Enem(){
         return ID_Edicao_Enem;
     }
-
-    public void setID_Edicao_Enem(Long ID_Edicao_Enem) {
+    public void setID_Edicao_Enem(Long ID_Edicao_Enem){
         this.ID_Edicao_Enem = ID_Edicao_Enem;
     }
-
-    public Integer getAnoAplicacao() {
-        return anoAplicacao;
+    public Integer getAno_Aplicacao(){
+        return Ano_aplicacao;
     }
-
-    public void setAnoAplicacao(Integer anoAplicacao) {
-        this.anoAplicacao = anoAplicacao;
+    public void setAno_aplicacao(Integer Ano_aplicacao){
+        this.Ano_aplicacao = Ano_aplicacao;
     }
-
-    public String getTipoAplicacao() {
-        return tipoAplicacao;
+    public String getTipo_aplicacao(){
+        return Tipo_aplicacao;
     }
-
-    public void setTipoAplicacao(String tipoAplicacao) {
-        this.tipoAplicacao = tipoAplicacao;
+    public void setTipo_aplicacao(String Tipo_aplicacao){
+        this.Tipo_aplicacao = Tipo_aplicacao;
     }
 }
