@@ -7,8 +7,7 @@ public class Area_Conhecimento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID_Area_Conhecimento;
-    private Integer Ano_aplicacao;
-    private String Tipo_aplicacao;
+    private String Nome;
 
     public Long getID_Area_Conhecimento(){
         return ID_Area_Conhecimento;
@@ -16,16 +15,10 @@ public class Area_Conhecimento {
     public void setID_Area_Conhecimento(Long ID_Area_Conhecimento){
         this.ID_Area_Conhecimento = ID_Area_Conhecimento;
     }
-    public Integer getAno_aplicacao(){
-        return Ano_aplicacao;
+    public String getNome(){
+        return Nome;
     }
-    public void setAno_aplicacao(Integer Ano_aplicacao){
-        this.Ano_aplicacao = Ano_aplicacao;
-    }
-    public String getTipo_aplicacao(){
-        return Tipo_aplicacao;
-    }
-    public void setTipo_aplicacao(String Tipo_aplicacao){
-        this.Tipo_aplicacao = Tipo_aplicacao;
+    public void setNome(String Nome){
+        this.Nome = Nome;
     }
 }

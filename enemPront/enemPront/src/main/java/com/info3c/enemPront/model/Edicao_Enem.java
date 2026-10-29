@@ -3,7 +3,7 @@ package br.com.info3c.enemPront.model;
 import jakarta.persistence.*;
 
 @Entity
-
+@Table(name = "Edicao_Enem")
 public class Edicao_Enem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

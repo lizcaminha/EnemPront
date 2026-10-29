@@ -19,7 +19,6 @@ public class Usuario {
     public Long getID_Usuario() {
         return ID_Usuario;
     }
-
     public void setID_Usuario(Long ID_Usuario) {
         this.ID_Usuario = ID_Usuario;
     }
