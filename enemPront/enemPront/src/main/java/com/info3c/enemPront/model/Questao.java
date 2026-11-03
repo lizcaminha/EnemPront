@@ -1,4 +1,4 @@
-package br.com.info3c.enemPront.model;
+package com.info3c.enemPront.model;
 
 import jakarta.persistence.*;
 
@@ -10,7 +10,7 @@ public class Questao{
     @Column(name = "ID_Questao")
     private Long IdQuestao;
     @Column(name = "Enunciado")
-    private String enunciado;
+    private String Enunciado;
     @Column(name = "Alternativa_A", nullable = false)
     private String AlternativaA;
     @Column(name = "Alternativa_B", nullable = false)
@@ -59,7 +59,7 @@ public class Questao{
         this.AlternativaC = AlternativaC;
     }
     public String getAlternativaD(){
-        return Alternativa_D;
+        return AlternativaD;
     }
     public void setAlternativaD(String AlternativaD){
         this.AlternativaD = AlternativaD;
@@ -74,7 +74,7 @@ public class Questao{
         return AlternativaCorreta;
     }
     public void setAlternativaCorreta(String AlternativaCorreta){
-        this.AlternativaCorreta = AlternativaCorreta
+        this.AlternativaCorreta = AlternativaCorreta;
     }
     public EdicaoEnem getIdEdicaoEnem(){
         return IdEdicaoEnem;

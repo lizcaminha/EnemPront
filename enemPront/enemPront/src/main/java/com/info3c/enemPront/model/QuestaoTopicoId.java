@@ -1,4 +1,4 @@
-package br.com.info3c.enemPront.model;
+package com.info3c.enemPront.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

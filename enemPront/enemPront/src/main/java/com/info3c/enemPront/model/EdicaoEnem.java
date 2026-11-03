@@ -1,4 +1,4 @@
-package br.com.info3c.enemPront.model;
+package com.info3c.enemPront.model;
 
 import jakarta.persistence.*;
 
@@ -14,7 +14,7 @@ public class EdicaoEnem {
     @Column(name = "Tipo_aplicacao", nullable = false)
     private String TipoAplicacao;
 
-    public Long getIdEdicaoEnem){
+    public Long getIdEdicaoEnem(){
         return IdEdicaoEnem;
     }
     public void setIdEdicaoEnem(Long IdEdicaoEnem){
