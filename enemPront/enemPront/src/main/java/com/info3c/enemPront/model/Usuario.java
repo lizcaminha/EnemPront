@@ -4,23 +4,29 @@ import java.time.LocalDate;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "Usuario")
 public class Usuario {
 
     @id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-    private Long ID_Usuario;
+    @Column(name = "ID_Usuario")
+    private Long IdUsuario;
+    @Column(name = "Nome", nullable = false)
     private String Nome;
+    @Column(name = "Email", nullable = false)
     private String Email;
+    @Column(name = "Senha", nullable = false)
     private String Senha;
-    private LocalDate Dt_nascimento;
+    @Column(name = "Dt_nascimento", nullable = false)
+    private LocalDate DtNascimento;
+    @Column(name = "Status", nullable = false)
     private String Status;
 
-    public Long getID_Usuario() {
-        return ID_Usuario;
+    public Long getIdUsuario() {
+        return IdUsuario;
     }
-    public void setID_Usuario(Long ID_Usuario) {
-        this.ID_Usuario = ID_Usuario;
+    public void setIdUsuario(Long IdUsuario) {
+        this.IdUsuario = IdUsuario;
     }
     public String getNome() {
         return Nome;
@@ -40,11 +46,11 @@ public class Usuario {
     public void setSenha(String Senha){
         this.Senha = Senha;
     }
-    public LocalDate getDt_nascimento() {
-        return Dt_nascimento;
+    public LocalDate getDtNascimento() {
+        return DtNascimento;
     }
-    public void setDt_nascimento(LocalDate Dt_nascimento) {
-        this.Dt_nascimento = Dt_nascimento;
+    public void setDtNascimento(LocalDate DtNascimento) {
+        this.DtNascimento = DtNascimento;
     }
     public String getStatus() {
         return Status;

@@ -8,26 +8,31 @@ public class Questao{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_Questao")
-    private Long idQuestao;
+    private Long IdQuestao;
     @Column(name = "Enunciado")
     private String enunciado;
-    @Column(name = "Alternativa_A")
-    private String alternativaA;
-    private String alternativaB;
-    private String alternativaC;
-    private String alternativaD;
-    private String alternativaE;
-    private String alternativaCorreta;
+    @Column(name = "Alternativa_A", nullable = false)
+    private String AlternativaA;
+    @Column(name = "Alternativa_B", nullable = false)
+    private String AlternativaB;
+    @Column(name = "Alternativa_C", nullable = false)
+    private String AlternativaC;
+    @Column(name = "Alternativa_D", nullable = false)
+    private String AlternativaD;
+    @Column(name = "Alternativa_E", nullable = false)
+    private String AlternativaE;
+    @Column(name = "Alternativa_correta", nullable = false)
+    private String AlternativaCorreta;
 
     @ManyToOne
     @JoinColumn(name = "ID_Edicao_Enem", nullable = false)
-    private Edicao_Enem edicaoEnem;
+    private EdicaoEnem IdEdicaoEnem;
 
-    public Long getID_Questao(){
-        return ID_Questao;
+    public Long getIdQuestao(){
+        return IdQuestao;
     }
-    public void setID_Questao(Long ID_Questao){
-        this.ID_Questao = ID_Questao;
+    public void setIdQuestao(Long IdQuestao){
+        this.IdQuestao = IdQuestao;
     }
     public String getEnunciado(){
         return Enunciado;
@@ -35,46 +40,46 @@ public class Questao{
     public void setEnunciado(String Enunciado){
         this.Enunciado = Enunciado;
     }
-    public String getAlternativa_A(){
-        return Alternativa_A;
+    public String getAlternativaA(){
+        return AlternativaA;
     }
-    public void setAlternativa_A(String Alternativa_A){
-        this.Alternativa_A = Alternativa_A;
+    public void setAlternativaA(String AlternativaA){
+        this.AlternativaA = AlternativaA;
     }
-    public String getAlternativa_B(){
-        return Alternativa_B;
+    public String getAlternativaB(){
+        return AlternativaB;
     }
-    public void setAlternativa_B(String Alternativa_B){
-        this.Alternativa_B = Alternativa_B;
+    public void setAlternativa_(String AlternativaB){
+        this.AlternativaB = AlternativaB;
     }
     public String getAlternativa_C(){
-        return Alternativa_C;
+        return AlternativaC;
     }
-    public void setAlternativa_C(String Alternativa_C){
-        this.Alternativa_C = Alternativa_C;
+    public void setAlternativa_C(String AlternativaC){
+        this.AlternativaC = AlternativaC;
     }
-    public String getAlternativa_D(){
+    public String getAlternativaD(){
         return Alternativa_D;
     }
-    public void setAlternativa_D(String Alternativa_D){
-        this.Alternativa_D = Alternativa_D;
+    public void setAlternativaD(String AlternativaD){
+        this.AlternativaD = AlternativaD;
     }
-    public String getAlternativa_E(){
-        return Alternativa_E;
+    public String getAlternativaE(){
+        return AlternativaE;
     }
-    public void setAlternativa_E(String Alternativa_E){
-        this.Alternativa_E = Alternativa_E;
+    public void setAlternativaE(String AlternativaE){
+        this.AlternativaE = AlternativaE;
     }
-    public String getAlternativa_correta(){
-        return Alternativa_correta;
+    public String getAlternativaCorreta(){
+        return AlternativaCorreta;
     }
-    public void setAlternativa_correta(String Alternativa_correta){
-        this.Alternativa_correta = Alternativa_correta
+    public void setAlternativaCorreta(String AlternativaCorreta){
+        this.AlternativaCorreta = AlternativaCorreta
     }
-    public Edicao_Enem getEdicaoEnem(){
-        return edicaoEnem;
+    public EdicaoEnem getIdEdicaoEnem(){
+        return IdEdicaoEnem;
     }
-    public void setEdicaoEnem(){
-        this.edicaoEnem = edicaoEnem;
+    public void setIdEdicaoEnem(){
+        this.IdEdicaoEnem = IdEdicaoEnem;
     }
 }
