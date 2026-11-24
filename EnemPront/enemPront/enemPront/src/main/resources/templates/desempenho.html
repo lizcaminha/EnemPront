@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Enem Pront - Desempenho</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&display=swap">
+  <link rel="stylesheet" href="styles.css" th:href="@{/styles.css}">
+</head>
+<body>
+
+<header id="hd">
+  <a href="index.html" th:href="@{/}" class="logo"><span>Enem <b>Pront</b></span></a>
+  <nav>
+    <a href="index.html" th:href="@{/}">🏠 Início</a>
+    <a href="questoes.html" th:href="@{/questoes}">📚 Questões</a>
+    <a href="simulado.html" th:href="@{/simulado}">📝 Simulado</a>
+    <a href="desempenho.html" th:href="@{/desempenho}" class="cur">📊 Desempenho</a>
+  </nav>
+  <div class="auth" th:unless="${usuarioLogado != null}">
+    <a href="login.html" th:href="@{/login}" class="btn-o">Entrar</a>
+    <a href="cadastro.html" th:href="@{/cadastro}" class="btn-f">Cadastrar</a>
+  </div>
+  <div class="auth" th:if="${usuarioLogado != null and not usuarioLogado.admin()}">
+    <a href="perfil.html" th:href="@{/perfil}" class="chip"><span class="av"></span><span th:text="${usuarioLogado.nome()}">Aluno</span></a>
+    <form th:action="@{/logout}" method="post"><button type="submit" class="out" aria-label="Sair">⇤</button></form>
+  </div>
+  <div class="auth" th:if="${usuarioLogado != null and usuarioLogado.admin()}">
+    <a href="#" th:href="@{/admin}" class="chip adm"><span class="av adm">👤</span>ADM</a>
+    <form th:action="@{/logout}" method="post"><button type="submit" class="out" aria-label="Sair">⇤</button></form>
+  </div>
+</header>
+
+<main class="view">
+  <div class="gate" id="perfGate" th:unless="${aluno}">
+    <div class="em">📊</div>
+    <h2>Acompanhe seu desempenho</h2>
+    <p>Crie uma conta gratuita para ver suas estatísticas, gráficos de desempenho e acompanhar sua evolução.</p>
+    <div class="row">
+      <a href="cadastro.html" th:href="@{/cadastro}">🚀 Criar conta grátis</a>
+      <a href="login.html" th:href="@{/login}">Entrar</a>
+    </div>
+  </div>
+
+  <div class="wrap" id="perfBox" th:if="${aluno}" style="max-width:1330px">
+    <h2 class="pg" style="font-style:italic;font-size:34px;margin:0">📊 Desempenho</h2>
+    <p style="font-style:italic;color:#9fb2d4;margin:0">Olá, <b style="color:#4aa3ef" th:text="${usuarioLogado.nome()}">Oswaldo</b>! Veja seu progresso detalhado.</p>
+    <div class="g4">
+      <div class="k"><b class="n1" th:text="${d.total()}">1</b><i>📝</i>Total respondidas</div>
+      <div class="k"><b class="n1" th:text="${d.acertos()}">1</b><i>✅</i>Acertos</div>
+      <div class="k"><b class="n2" th:text="${d.erros()}">0</b><i>❌</i>Erros</div>
+      <div class="k"><b class="n3" th:text="${d.taxa()} + '%'">100%</b><i>🎯</i>Taxa de acerto</div>
+    </div>
+    <div class="big">
+      <div class="g4 in" style="margin-top:0">
+        <div class="k">🔥<b class="n4" th:text="${d.diasSeguidos()}">1</b>Dias seguidos</div>
+        <div class="k">🏆<b class="n5" th:text="${d.maiorOfensiva()}">1</b>Maior ofensiva</div>
+        <div class="k">⚡<b class="n6" th:text="${d.questoesHoje()}">0</b>Questões hoje</div>
+        <div class="k">🎖️<b class="n3" th:text="${d.recordeDiario()}">1</b>Recorde Diário</div>
+      </div>
+      <div class="prog">
+        <h4>Progresso da ofensiva atual <em th:text="|${d.progressoOfensiva()} de 7 dias|">1 de 7 dias</em></h4>
+        <div class="days">
+          <i th:each="n : ${#numbers.sequence(1, 7)}" th:class="${n le d.progressoOfensiva()} ? 'on' : null" th:text="${n le d.progressoOfensiva()} ? '🔥' : ''">🔥</i>
+        </div>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:22px;border-radius:22px">
+      <h4 class="sec">📚 Desempenho por área do conhecimento</h4>
+      <div class="tbl-wrap" th:if="${not #lists.isEmpty(d.porArea())}">
+        <table class="tbl">
+          <thead><tr><th>Área</th><th>Respondidas</th><th>Acertos</th><th>Erros</th><th>Taxa de acerto</th></tr></thead>
+          <tbody>
+            <tr th:each="l : ${d.porArea()}">
+              <td th:text="${l.nome()}">Ciências da Natureza e suas Tecnologias</td>
+              <td th:text="${l.total()}">1</td>
+              <td th:text="${l.acertos()}">1</td>
+              <td th:text="${l.erros()}">0</td>
+              <td th:text="${l.taxa()} + '%'">100%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="vazio" th:if="${#lists.isEmpty(d.porArea())}">Responda questões para ver seu desempenho por área.</p>
+    </div>
+    <div class="panel" style="margin-top:22px;border-radius:22px">
+      <h4 class="sec">🎯 Tópicos que merecem mais atenção</h4>
+      <div class="tbl-wrap" th:if="${not #lists.isEmpty(d.topicosFracos())}">
+        <table class="tbl">
+          <thead><tr><th>Tópico</th><th>Respondidas</th><th>Acertos</th><th>Erros</th><th>Taxa de acerto</th></tr></thead>
+          <tbody>
+            <tr th:each="l : ${d.topicosFracos()}">
+              <td th:text="${l.nome()}">Termodinâmica</td>
+              <td th:text="${l.total()}">2</td>
+              <td th:text="${l.acertos()}">1</td>
+              <td th:text="${l.erros()}">1</td>
+              <td th:text="${l.taxa()} + '%'">50%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="vazio" th:if="${#lists.isEmpty(d.topicosFracos())}">Nenhum ponto fraco identificado até agora. Continue praticando!</p>
+    </div>
+  </div>
+</main>
+
+<script th:src="@{/app.js}" defer></script>
+</body>
+</html>

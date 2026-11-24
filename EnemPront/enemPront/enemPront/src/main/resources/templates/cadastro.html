@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Enem Pront - Criar Conta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&display=swap">
+  <link rel="stylesheet" href="styles.css" th:href="@{/styles.css}">
+</head>
+<body>
+
+<header id="hd">
+  <a href="index.html" th:href="@{/}" class="logo"><span>Enem <b>Pront</b></span></a>
+  <nav>
+    <a href="index.html" th:href="@{/}">🏠 Início</a>
+    <a href="questoes.html" th:href="@{/questoes}">📚 Questões</a>
+    <a href="simulado.html" th:href="@{/simulado}">📝 Simulado</a>
+    <a href="desempenho.html" th:href="@{/desempenho}">📊 Desempenho</a>
+  </nav>
+  <div class="auth" th:unless="${usuarioLogado != null}">
+    <a href="login.html" th:href="@{/login}" class="btn-o">Entrar</a>
+    <a href="cadastro.html" th:href="@{/cadastro}" class="btn-f">Cadastrar</a>
+  </div>
+  <div class="auth" th:if="${usuarioLogado != null and not usuarioLogado.admin()}">
+    <a href="perfil.html" th:href="@{/perfil}" class="chip"><span class="av"></span><span th:text="${usuarioLogado.nome()}">Aluno</span></a>
+    <form th:action="@{/logout}" method="post"><button type="submit" class="out" aria-label="Sair">⇤</button></form>
+  </div>
+  <div class="auth" th:if="${usuarioLogado != null and usuarioLogado.admin()}">
+    <a href="#" th:href="@{/admin}" class="chip adm"><span class="av adm">👤</span>ADM</a>
+    <form th:action="@{/logout}" method="post"><button type="submit" class="out" aria-label="Sair">⇤</button></form>
+  </div>
+</header>
+
+<main class="view">
+  <form class="box lg" id="fCad" th:action="@{/cadastro}" th:object="${cadastroForm}" method="post" novalidate>
+    <a href="index.html" th:href="@{/}" class="logo"><span>Enem <b>Pront</b></span></a>
+    <h2 class="ttl">Crie sua conta</h2>
+    <p class="t2">Comece a estudar para o ENEM gratuitamente</p>
+    <div class="f">
+      <label for="nome">Nome completo</label>
+      <input id="nome" name="nome" th:value="*{nome}" placeholder="Seu nome" maxlength="100" autocomplete="name">
+      <div class="err" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+    </div>
+    <div class="f">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" th:value="*{email}" placeholder="seu@gmail.com" maxlength="50" autocomplete="email">
+      <div class="err" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    </div>
+    <div class="f">
+      <label for="nasc">Data de Nascimento</label>
+      <input type="date" id="nasc" name="dtNascimento" th:value="*{dtNascimento}" autocomplete="bday">
+      <div class="err" th:if="${#fields.hasErrors('dtNascimento')}" th:errors="*{dtNascimento}"></div>
+    </div>
+    <div class="f">
+      <label for="p1">Senha</label>
+      <input type="password" id="p1" name="senha" placeholder="Mín. 8 caracteres, 1 número e 1 especial" maxlength="64" autocomplete="new-password">
+      <button type="button" class="eye" aria-label="Mostrar senha" style="bottom:2px;font-size:20px">🙈</button>
+    </div>
+    <div class="err" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></div>
+    <ul class="chk" id="chk">
+      <li>Mínimo 8 caracteres</li>
+      <li>Ao menos 1 número</li>
+      <li>Ao menos 1 caractere especial</li>
+    </ul>
+    <div class="f">
+      <label for="p2">Confirmar Senha</label>
+      <input type="password" id="p2" name="confirmarSenha" placeholder="Repita a senha" maxlength="64" autocomplete="new-password">
+      <div class="err" id="perr" hidden>As senhas não coincidem</div>
+      <div class="err" th:if="${#fields.hasErrors('confirmarSenha')}" th:errors="*{confirmarSenha}"></div>
+    </div>
+    <button class="go2" id="cadBtn" type="submit">🎓 Criar conta grátis</button>
+    <p class="small">Já tem uma conta? <a href="login.html" th:href="@{/login}">Entrar</a></p>
+  </form>
+</main>
+
+<a href="index.html" th:href="@{/}" class="back" aria-label="Voltar">←</a>
+
+<script th:src="@{/app.js}" defer></script>
+</body>
+</html>

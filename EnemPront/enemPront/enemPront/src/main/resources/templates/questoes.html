@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Enem Pront - Banco de Questões</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&display=swap">
+  <link rel="stylesheet" href="styles.css" th:href="@{/styles.css}">
+</head>
+<body>
+
+<header id="hd">
+  <a href="index.html" th:href="@{/}" class="logo"><span>Enem <b>Pront</b></span></a>
+  <nav>
+    <a href="index.html" th:href="@{/}">🏠 Início</a>
+    <a href="questoes.html" th:href="@{/questoes}" class="cur">📚 Questões</a>
+    <a href="simulado.html" th:href="@{/simulado}">📝 Simulado</a>
+    <a href="desempenho.html" th:href="@{/desempenho}">📊 Desempenho</a>
+  </nav>
+  <div class="auth" th:unless="${usuarioLogado != null}">
+    <a href="login.html" th:href="@{/login}" class="btn-o">Entrar</a>
+    <a href="cadastro.html" th:href="@{/cadastro}" class="btn-f">Cadastrar</a>
+  </div>
+  <div class="auth" th:if="${usuarioLogado != null and not usuarioLogado.admin()}">
+    <a href="perfil.html" th:href="@{/perfil}" class="chip"><span class="av"></span><span th:text="${usuarioLogado.nome()}">Aluno</span></a>
+    <form th:action="@{/logout}" method="post"><button type="submit" class="out" aria-label="Sair">⇤</button></form>
+  </div>
+  <div class="auth" th:if="${usuarioLogado != null and usuarioLogado.admin()}">
+    <a href="#" th:href="@{/admin}" class="chip adm"><span class="av adm">👤</span>ADM</a>
+    <form th:action="@{/logout}" method="post"><button type="submit" class="out" aria-label="Sair">⇤</button></form>
+  </div>
+</header>
+
+<main class="view">
+  <div class="wrap">
+    <div class="flash" th:if="${erro != null}" th:text="${erro}"></div>
+    <div class="flash ok" th:if="${sucesso != null}" th:text="${sucesso}"></div>
+    <h2 class="pg">📚 Banco de Questões</h2>
+    <p style="color:#a9bde0;font-size:28px;margin:0 0 16px" th:text="${pagina.total()} + (${pagina.total()} == 1 ? ' questão encontrada' : ' questões encontradas')">67 questões encontradas</p>
+    <div class="panel" style="padding:12px 24px 24px;border-radius:18px">
+      <div style="font-size:26px">🔍 Filtros</div>
+      <form class="filters" id="filtros" th:action="@{/questoes}" method="get">
+        <input class="sel" type="search" name="q" th:value="${filtro.q}" maxlength="100" placeholder="🔍 Buscar no enunciado" style="grid-column:1/-1;text-align:left">
+        <select class="sel" name="area" data-auto>
+          <option value="">Todas as áreas</option>
+          <option th:each="a : ${areas}" th:value="${a.id()}" th:text="${a.rotulo()}" th:selected="${filtro.area != null and filtro.area == a.id()}">Matemática</option>
+        </select>
+        <select class="sel" name="topico" data-auto>
+          <option value="">Todos os tópicos</option>
+          <option th:each="t : ${topicos}" th:value="${t.id()}" th:text="${t.rotulo()}" th:selected="${filtro.topico != null and filtro.topico == t.id()}">Termodinâmica</option>
+        </select>
+        <select class="sel" name="ano" data-auto>
+          <option value="">Todos os anos</option>
+          <option th:each="a : ${anos}" th:value="${a}" th:text="${a}" th:selected="${filtro.ano != null and filtro.ano == a}">2019</option>
+        </select>
+        <select class="sel" name="dificuldade" data-auto>
+          <option value="">Qualquer Dificuldade</option>
+          <option value="B" th:selected="${filtro.dificuldade == 'B'}">Fácil</option>
+          <option value="M" th:selected="${filtro.dificuldade == 'M'}">Médio</option>
+          <option value="A" th:selected="${filtro.dificuldade == 'A'}">Difícil</option>
+        </select>
+        <select class="sel" name="incidencia" data-auto>
+          <option value="">Qualquer incidência</option>
+          <option value="A" th:selected="${filtro.incidencia == 'A'}">Alta incidência</option>
+          <option value="M" th:selected="${filtro.incidencia == 'M'}">Média incidência</option>
+          <option value="B" th:selected="${filtro.incidencia == 'B'}">Baixa incidência</option>
+        </select>
+        <button type="button" class="sel" style="cursor:pointer" data-limpar>🗑️ Limpar filtros</button>
+      </form>
+    </div>
+    <div class="panel vazio-box" th:if="${#lists.isEmpty(pagina.itens())}" style="border-radius:18px;padding:16px 20px 24px;margin-top:20px">
+      <p class="vazio">Nenhuma questão encontrada para os filtros selecionados.</p>
+    </div>
+    <div class="panel q" th:each="q : ${pagina.itens()}" th:id="|q${q.id()}|" style="border-radius:18px;padding:16px 20px 30px">
+      <div class="tags">
+        <span th:each="t : ${q.tags()}" th:text="${t}">ENEM 2009</span>
+      </div>
+      <p th:text="${q.enunciado()}">Enunciado da questão</p>
+      <form th:action="@{|/questoes/${q.id()}/responder|}" method="post">
+        <input type="hidden" name="retorno" th:value="${retorno}">
+        <div class="opts">
+          <button type="submit" name="alternativa" th:each="a : ${q.alternativas()}" th:value="${a.letra()}" th:text="${a.rotulo()}" th:classappend="${a.estado()}">A) Alternativa de exemplo</button>
+        </div>
+      </form>
+      <p class="res" th:if="${q.mensagem() != null}" th:text="${q.mensagem()}"></p>
+    </div>
+    <div class="pager" th:if="${pagina.totalPaginas() gt 1}">
+      <a th:if="${pagina.numero() gt 0}" th:href="@{/questoes(q=${filtro.q},area=${filtro.area},topico=${filtro.topico},ano=${filtro.ano},dificuldade=${filtro.dificuldade},incidencia=${filtro.incidencia},pagina=${pagina.numero() - 1})}">← Anterior</a>
+      <span th:text="|Página ${pagina.numero() + 1} de ${pagina.totalPaginas()}|">Página 1 de 3</span>
+      <a th:if="${pagina.numero() + 1 lt pagina.totalPaginas()}" th:href="@{/questoes(q=${filtro.q},area=${filtro.area},topico=${filtro.topico},ano=${filtro.ano},dificuldade=${filtro.dificuldade},incidencia=${filtro.incidencia},pagina=${pagina.numero() + 1})}">Próxima →</a>
+    </div>
+  </div>
+</main>
+
+<script th:src="@{/app.js}" defer></script>
+</body>
+</html>

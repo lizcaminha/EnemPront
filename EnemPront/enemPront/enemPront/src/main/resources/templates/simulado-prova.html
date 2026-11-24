@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Enem Pront - Simulado em andamento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&display=swap">
+  <link rel="stylesheet" href="styles.css" th:href="@{/styles.css}">
+</head>
+<body>
+
+<header id="hd">
+  <a href="index.html" th:href="@{/}" class="logo"><span>Enem <b>Pront</b></span></a>
+  <nav>
+    <a href="index.html" th:href="@{/}">🏠 Início</a>
+    <a href="questoes.html" th:href="@{/questoes}">📚 Questões</a>
+    <a href="simulado.html" th:href="@{/simulado}" class="cur">📝 Simulado</a>
+    <a href="desempenho.html" th:href="@{/desempenho}">📊 Desempenho</a>
+  </nav>
+  <div class="auth" th:unless="${usuarioLogado != null}">
+    <a href="login.html" th:href="@{/login}" class="btn-o">Entrar</a>
+    <a href="cadastro.html" th:href="@{/cadastro}" class="btn-f">Cadastrar</a>
+  </div>
+  <div class="auth" th:if="${usuarioLogado != null and not usuarioLogado.admin()}">
+    <a href="perfil.html" th:href="@{/perfil}" class="chip"><span class="av"></span><span th:text="${usuarioLogado.nome()}">Aluno</span></a>
+    <form th:action="@{/logout}" method="post"><button type="submit" class="out" aria-label="Sair">⇤</button></form>
+  </div>
+  <div class="auth" th:if="${usuarioLogado != null and usuarioLogado.admin()}">
+    <a href="#" th:href="@{/admin}" class="chip adm"><span class="av adm">👤</span>ADM</a>
+    <form th:action="@{/logout}" method="post"><button type="submit" class="out" aria-label="Sair">⇤</button></form>
+  </div>
+</header>
+
+<main class="view">
+  <div class="wrap">
+    <h2 class="pg">📝 Simulado ENEM</h2>
+    <div class="gate" th:if="${#lists.isEmpty(prova.questoes())}">
+      <div class="em">📝</div>
+      <h2>Simulado indisponível</h2>
+      <p>As questões deste simulado não estão mais disponíveis.</p>
+      <div class="row"><a href="simulado.html" th:href="@{/simulado}">Voltar</a></div>
+    </div>
+    <div th:unless="${#lists.isEmpty(prova.questoes())}">
+      <div class="cron-bar">
+        <span>⏱️ Tempo restante</span>
+        <b id="cron" th:attr="data-restante=${prova.restanteSegundos()}">0:00</b>
+      </div>
+      <form id="fProva" th:action="@{/simulado/finalizar}" method="post">
+        <div class="panel q" th:each="q, st : ${prova.questoes()}" style="border-radius:18px;padding:16px 20px 30px">
+          <div class="tags">
+            <span th:text="|Questão ${st.count} de ${prova.total()}|">Questão 1 de 5</span>
+            <span th:each="t : ${q.tags()}" th:text="${t}">ENEM 2009</span>
+          </div>
+          <p th:text="${q.enunciado()}">Enunciado da questão</p>
+          <div class="opts">
+            <label class="opt" th:each="a : ${q.alternativas()}">
+              <input type="radio" th:name="|r_${q.id()}|" th:value="${a.letra()}">
+              <span th:text="${a.rotulo()}">A) Alternativa de exemplo</span>
+            </label>
+          </div>
+        </div>
+        <button class="start" type="submit">✅ Finalizar simulado</button>
+      </form>
+    </div>
+  </div>
+</main>
+<script th:src="@{/app.js}" defer></script>
+</body>
+</html>

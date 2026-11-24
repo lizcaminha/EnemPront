@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Enem Pront - Meu Perfil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&display=swap">
+  <link rel="stylesheet" href="styles.css" th:href="@{/styles.css}">
+</head>
+<body>
+
+<header id="hd">
+  <a href="index.html" th:href="@{/}" class="logo"><span>Enem <b>Pront</b></span></a>
+  <nav>
+    <a href="index.html" th:href="@{/}">🏠 Início</a>
+    <a href="questoes.html" th:href="@{/questoes}">📚 Questões</a>
+    <a href="simulado.html" th:href="@{/simulado}">📝 Simulado</a>
+    <a href="desempenho.html" th:href="@{/desempenho}">📊 Desempenho</a>
+  </nav>
+  <div class="auth" th:unless="${usuarioLogado != null}">
+    <a href="login.html" th:href="@{/login}" class="btn-o">Entrar</a>
+    <a href="cadastro.html" th:href="@{/cadastro}" class="btn-f">Cadastrar</a>
+  </div>
+  <div class="auth" th:if="${usuarioLogado != null and not usuarioLogado.admin()}">
+    <a href="perfil.html" th:href="@{/perfil}" class="chip"><span class="av"></span><span th:text="${usuarioLogado.nome()}">Aluno</span></a>
+    <form th:action="@{/logout}" method="post"><button type="submit" class="out" aria-label="Sair">⇤</button></form>
+  </div>
+  <div class="auth" th:if="${usuarioLogado != null and usuarioLogado.admin()}">
+    <a href="#" th:href="@{/admin}" class="chip adm"><span class="av adm">👤</span>ADM</a>
+    <form th:action="@{/logout}" method="post"><button type="submit" class="out" aria-label="Sair">⇤</button></form>
+  </div>
+</header>
+
+<main class="view">
+  <div class="wrap">
+    <h2 class="pg" style="font-size:34px">👤 Meu Perfil</h2>
+    <div class="panel prof">
+      <span class="av lg"></span>
+      <div><span th:text="${perfil.nome()}">Oswaldo</span><br><span th:text="${perfil.email()}">oswaldo@email.com</span><br><span class="badge">🎓 ALUNO</span></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b style="color:#4aa3ef" th:text="${perfil.questoes()}">1</b><span>Questões</span></div>
+      <div class="stat"><b style="color:var(--warn)" th:text="${perfil.ofensiva()}">1</b><span>Ofensiva</span></div>
+      <div class="stat"><b style="color:var(--ok)" th:text="${perfil.acerto()} + '%'">100%</b><span>Acerto</span></div>
+    </div>
+    <form class="panel edit" th:action="@{/perfil}" th:object="${perfilForm}" method="post" novalidate>
+      <div style="font-size:23px">Editar Informações</div>
+      <div class="flash ok" th:if="${sucesso != null}" th:text="${sucesso}"></div>
+      <div class="f">
+        <label for="prof-nome">Nome</label>
+        <input id="prof-nome" name="nome" th:value="*{nome}" maxlength="100">
+        <div class="err" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+      </div>
+      <div class="f">
+        <label for="prof-nasc">Data de Nascimento</label>
+        <input type="date" id="prof-nasc" name="dtNascimento" th:value="*{dtNascimento}">
+        <div class="err" th:if="${#fields.hasErrors('dtNascimento')}" th:errors="*{dtNascimento}"></div>
+      </div>
+      <button class="save" type="submit">🖨️ Salvar alterações</button>
+    </form>
+  </div>
+</main>
+
+<script th:src="@{/app.js}" defer></script>
+</body>
+</html>

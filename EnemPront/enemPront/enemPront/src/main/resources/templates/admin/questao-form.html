@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Enem Pront - Questão (ADM)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&display=swap">
+  <link rel="stylesheet" href="styles.css" th:href="@{/styles.css}">
+</head>
+<body>
+
+<header id="hd">
+  <a href="index.html" th:href="@{/}" class="logo"><span>Enem <b>Pront</b></span></a>
+  <nav>
+    <a href="#" th:href="@{/admin}">🛠️ Painel</a>
+    <a href="#" th:href="@{/admin/questoes}" class="cur">📚 Questões</a>
+    <a href="#" th:href="@{/admin/usuarios}">👥 Usuários</a>
+    <a href="#" th:href="@{/admin/catalogos}">🗂️ Catálogos</a>
+    <a href="#" th:href="@{/}">🏠 Site</a>
+  </nav>
+  <div class="auth" th:unless="${usuarioLogado != null}">
+    <a href="login.html" th:href="@{/login}" class="btn-o">Entrar</a>
+    <a href="cadastro.html" th:href="@{/cadastro}" class="btn-f">Cadastrar</a>
+  </div>
+  <div class="auth" th:if="${usuarioLogado != null and not usuarioLogado.admin()}">
+    <a href="perfil.html" th:href="@{/perfil}" class="chip"><span class="av"></span><span th:text="${usuarioLogado.nome()}">Aluno</span></a>
+    <form th:action="@{/logout}" method="post"><button type="submit" class="out" aria-label="Sair">⇤</button></form>
+  </div>
+  <div class="auth" th:if="${usuarioLogado != null and usuarioLogado.admin()}">
+    <a href="#" th:href="@{/admin}" class="chip adm"><span class="av adm">👤</span>ADM</a>
+    <form th:action="@{/logout}" method="post"><button type="submit" class="out" aria-label="Sair">⇤</button></form>
+  </div>
+</header>
+
+<main class="view">
+  <div class="wrap" style="max-width:860px">
+    <h2 class="pg" th:text="${titulo}">Nova questão</h2>
+    <form class="panel admin-form" th:action="@{${acao}}" th:object="${form}" method="post" novalidate style="border-radius:18px">
+      <div class="flash" th:if="${#fields.hasGlobalErrors()}">
+        <div th:each="e : ${#fields.globalErrors()}" th:text="${e}">Erro</div>
+      </div>
+      <div class="f">
+        <label for="edicao">Edição do ENEM</label>
+        <select id="edicao" name="edicaoId">
+          <option value="">Selecione</option>
+          <option th:each="e : ${edicoes}" th:value="${e.id()}" th:text="${e.rotulo()}" th:selected="${form.edicaoId != null and form.edicaoId == e.id()}">ENEM 2009 (R)</option>
+        </select>
+        <div class="err" th:if="${#fields.hasErrors('edicaoId')}" th:errors="*{edicaoId}"></div>
+      </div>
+      <div class="f">
+        <label for="enunciado">Enunciado</label>
+        <textarea id="enunciado" name="enunciado" maxlength="5000" rows="8" th:text="*{enunciado}"></textarea>
+        <div class="err" th:if="${#fields.hasErrors('enunciado')}" th:errors="*{enunciado}"></div>
+      </div>
+        <div class="f">
+          <label for="altA">Alternativa A</label>
+          <input id="altA" name="alternativaA" th:value="*{alternativaA}" maxlength="200">
+          <div class="err" th:if="${#fields.hasErrors('alternativaA')}" th:errors="*{alternativaA}"></div>
+        </div>
+        <div class="f">
+          <label for="altB">Alternativa B</label>
+          <input id="altB" name="alternativaB" th:value="*{alternativaB}" maxlength="200">
+          <div class="err" th:if="${#fields.hasErrors('alternativaB')}" th:errors="*{alternativaB}"></div>
+        </div>
+        <div class="f">
+          <label for="altC">Alternativa C</label>
+          <input id="altC" name="alternativaC" th:value="*{alternativaC}" maxlength="200">
+          <div class="err" th:if="${#fields.hasErrors('alternativaC')}" th:errors="*{alternativaC}"></div>
+        </div>
+        <div class="f">
+          <label for="altD">Alternativa D</label>
+          <input id="altD" name="alternativaD" th:value="*{alternativaD}" maxlength="200">
+          <div class="err" th:if="${#fields.hasErrors('alternativaD')}" th:errors="*{alternativaD}"></div>
+        </div>
+        <div class="f">
+          <label for="altE">Alternativa E</label>
+          <input id="altE" name="alternativaE" th:value="*{alternativaE}" maxlength="200">
+          <div class="err" th:if="${#fields.hasErrors('alternativaE')}" th:errors="*{alternativaE}"></div>
+        </div>
+      <div class="f">
+        <label for="gabarito">Gabarito (alternativa correta)</label>
+        <select id="gabarito" name="alternativaCorreta">
+          <option value="">Selecione</option>
+          <option th:each="l : ${#strings.arraySplit('A,B,C,D,E', ',')}" th:value="${l}" th:text="${l}" th:selected="${form.alternativaCorreta == l}">A</option>
+        </select>
+        <div class="err" th:if="${#fields.hasErrors('alternativaCorreta')}" th:errors="*{alternativaCorreta}"></div>
+      </div>
+      <h4 class="sec">Tópicos e dificuldade</h4>
+      <div class="row2" th:each="slot, st : *{topicos}">
+        <div class="f">
+          <label th:for="|topico${st.index}|" th:text="|Tópico ${st.count}|">Tópico 1</label>
+          <select th:id="|topico${st.index}|" th:name="|topicos[${st.index}].topicoId|">
+            <option value="">—</option>
+            <option th:each="t : ${topicosDisponiveis}" th:value="${t.id()}" th:text="${t.rotulo()}" th:selected="${slot.topicoId != null and slot.topicoId == t.id()}">Termodinâmica (Física)</option>
+          </select>
+        </div>
+        <div class="f">
+          <label th:for="|dif${st.index}|">Dificuldade</label>
+          <select th:id="|dif${st.index}|" th:name="|topicos[${st.index}].dificuldade|">
+            <option value="">—</option>
+            <option value="B" th:selected="${slot.dificuldade == 'B'}">Fácil</option>
+            <option value="M" th:selected="${slot.dificuldade == 'M'}">Médio</option>
+            <option value="A" th:selected="${slot.dificuldade == 'A'}">Difícil</option>
+          </select>
+        </div>
+      </div>
+      <div class="acoes-fim">
+        <button class="save" type="submit">💾 Salvar questão</button>
+        <a class="btn-o" href="#" th:href="@{/admin/questoes}">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</main>
+<script th:src="@{/app.js}" defer></script>
+</body>
+</html>

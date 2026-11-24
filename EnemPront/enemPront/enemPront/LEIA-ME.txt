@@ -1,0 +1,41 @@
+EnemPront - como executar
+=========================
+
+Requisitos: JDK 21 e acesso à internet na primeira execução (Maven baixa as dependências).
+Esta pasta (a que contém o pom.xml) é a raiz do projeto.
+
+Executar
+  Linux/macOS:  ./mvnw spring-boot:run
+  Windows:      mvnw.cmd spring-boot:run
+  IntelliJ:     abrir o pom.xml e executar a classe EnemProntApplication
+Depois acesse http://localhost:8080
+
+Persistência
+  Os dados ficam em ./dados (banco H2 em arquivo) e permanecem após desligar o servidor.
+  Para backup, copie a pasta dados com o servidor parado. A pasta não deve ser versionada.
+
+Administrador
+  Entrada em /admin-login. E-mail padrão: admin@enempront.local
+  Defina a senha antes de iniciar, na variável de ambiente ENEMPRONT_ADMIN_PASSWORD.
+  Se ela não for definida, uma senha aleatória é gerada e exibida no console a cada
+  execução (linha "Senha temporária do administrador").
+  O administrador cadastra questões e gabaritos, tópicos, áreas e edições, e consulta o relatório de usuários.
+
+Variáveis de ambiente opcionais
+  PORT                      porta HTTP (padrão 8080)
+  ENEMPRONT_DB_PATH         caminho do banco (padrão ./dados/enempront)
+  ENEMPRONT_ADMIN_EMAIL     e-mail do administrador
+  ENEMPRONT_TZ              fuso horário das ofensivas diárias (padrão America/Cuiaba)
+  COOKIE_SECURE             true quando o sistema for servido por HTTPS
+
+Segurança
+  Senhas com BCrypt (custo 12); política: mínimo 8 caracteres, 1 número e 1 caractere especial.
+  Bloqueio temporário de login após 5 falhas seguidas no mesmo e-mail (15 minutos).
+  Proteção CSRF, cookie de sessão HttpOnly/SameSite, sessão renovada no login e expirando em 30 minutos.
+  Cabeçalhos de segurança (CSP, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy).
+  Acesso separado por perfil (aluno/administrador), contas inativas bloqueadas em tempo real,
+  consultas parametrizadas (JPA) e saída HTML escapada pelo Thymeleaf.
+
+Dados iniciais
+  Na primeira execução são criadas as 4 áreas do ENEM, as edições 2009/2012/2019 e 3 questões de exemplo
+  (as mesmas da análise de requisitos). Novas questões são cadastradas em /admin/questoes.
